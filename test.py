@@ -1,11 +1,9 @@
+
 import sqlite3
 from copy import deepcopy
 
 
 def search_by_title(movie_title : str) -> dict:
-    """
-    Поиск в базе данных по названию фильма, возвращает один фильм, самый свежий
-    """
     movie_data = {}
     with sqlite3.connect("netflix.db") as connection:
         cursor = connection.cursor()
@@ -23,7 +21,7 @@ def search_by_title(movie_title : str) -> dict:
 
 def search_by_date(start_date, end_date : str) -> list[dict]:
     """
-    Поиск в базе данных по диапазону лет выпуска, возвращает 100 записей
+    #Поиск в базе данных по диапазону лет выпуска, возвращает 100 записей
     """
     movie_data = {}
     response = []
@@ -42,7 +40,7 @@ def search_by_date(start_date, end_date : str) -> list[dict]:
 
 def search_by_children_rating() -> list[dict]:
     """
-    Поиск в базе данных по детскому рейтингу, возвращает 100 записей
+    #Поиск в базе данных по детскому рейтингу, возвращает 100 записей
     """
     movie_data = {}
     response = []
@@ -61,32 +59,13 @@ def search_by_children_rating() -> list[dict]:
 
 def search_by_family_rating() -> list[dict]:
     """
-    Поиск в базе данных по семейному рейтингу, возвращает 100 записей
+    #Поиск в базе данных по семейному рейтингу, возвращает 100 записей
     """
     movie_data = {}
     response = []
     with sqlite3.connect("netflix.db") as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT title, rating, description FROM 'netflix' WHERE rating = 'G' OR rating = 'PG' OR rating = 'PG-13' LIMIT 100")
-        for row in cursor.fetchall():
-
-            movie_data["title"] = row[0]
-            movie_data["rating"] = row[1]
-            movie_data["description"] = row[2]
-
-            response.append(deepcopy(movie_data))
-        return response
-
-
-def search_by_adult_rating() -> list[dict]:
-    """
-    Поиск в базе данных по взрослому рейтингу, возвращает 100 записей
-    """
-    movie_data = {}
-    response = []
-    with sqlite3.connect("netflix.db") as connection:
-        cursor = connection.cursor()
-        cursor.execute("SELECT title, rating, description FROM 'netflix' WHERE rating = 'R' OR rating = 'NC-17' LIMIT 100")
         for row in cursor.fetchall():
 
             movie_data["title"] = row[0]
@@ -147,3 +126,11 @@ def search_by_type(type, year, genre) -> set:
 
             response.append(deepcopy(movie_data))
         return response
+
+
+test_data = search_by_type("Movie", "2017", "Drama")
+print(test_data)
+print(type(test_data))
+
+
+#AND 'cast' LIKE ?  '%'+actor_b+'%'

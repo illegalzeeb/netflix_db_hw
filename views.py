@@ -31,3 +31,9 @@ def family_page():
 @main_blueprint.route("/movie/adult")
 def adult_page():
     return search_by_adult_rating()
+
+
+@main_blueprint.route("/movie/genre")
+def genre_page():
+    genre = request.args.get('g', '')
+    return search_by_adult_rating(genre)
