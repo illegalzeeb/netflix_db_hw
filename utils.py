@@ -115,21 +115,27 @@ def search_by_genre(genre: str) -> list[dict]:
         return response
 
 
-def search_by_actors(actor_a, actor_b: str) -> set:
+def search_by_actors(actor_a, actor_b: str) -> list:
     """
     Ищет актеров, игравших с парой указанных актеров
     """
     movie_data = []
     response = []
+    given_actors = [actor_a, actor_b]
     with sqlite3.connect("netflix.db") as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT 'cast' FROM 'netflix' WHERE 'cast' LIKE ? AND 'cast' LIKE ?", ('%'+actor_a+'%', '%'+actor_b+'%',))
+        cursor.execute('SELECT "cast" FROM "netflix" WHERE "cast" LIKE ? AND "cast" LIKE ?', ('%'+actor_a+'%', '%'+actor_b+'%',))
         for row in cursor.fetchall():
-            print(row)
-            movie_data = row.split(", ")
+            str_row = str(row)
+            str_row_trim = str_row[2:]
+            str_row = str_row_trim[:-3]
+            movie_data = str_row.split(", ")
+            for actor in movie_data:
+                if actor not in given_actors:
+                    if actor not in response:
+                        response.append(actor)
 
-            response.append(deepcopy(movie_data))
-        return set(response)
+        return response
 
 
 def search_by_type(type, year, genre) -> set:
