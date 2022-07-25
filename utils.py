@@ -138,7 +138,7 @@ def search_by_actors(actor_a, actor_b: str) -> list:
         return response
 
 
-def search_by_type(type, year, genre) -> set:
+def search_by_type(type, year, genre) -> list[dict]:
     """
     Ищет фильм по параметрам
     """
